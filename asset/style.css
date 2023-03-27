@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Alkatra&display=swap');
+:root {
+    --sublime :#fc5c7d, #6a82fb;
+    --dark: #2A2F42;
+    --black: #211E32;
+    --red: #ed215a;
+}
+
+@property --rotate {
+    syntax: "<angle>";
+    initial-value: 0deg;;
+    inherits: true;
+}
+
+@keyframes spin {
+    0%{
+        --rotate: 0deg;
+    }
+    100%{
+        --rotate: 360deg;
+    }
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Alkatra', cursive;
+}
+
+html {
+    background-image: linear-gradient(to bottom, #30cfd0 0%, #330867 100%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: var(--dark);
+    width: 400px;
+    max-width: 400px;
+    height: 700px;
+    max-height: 700px;
+    border-radius: 8px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    box-shadow: 0 12px 28px var(--black);
+    position: relative;
+    color: #ffffff;
+    display: inline-block;
+}
+
+.container::-webkit-scrollbar {
+    width: 0;
+}
+
+.dashboard {
+    position: fixed;
+    top: 18px;
+    right: 427px;
+    left: 427px;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    background-color: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard .name-song {
+    font-size: 28px;
+}
+
+.dashboard .img {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.img .bg-layer::before,
+.img .bg-layer {
+    opacity: 0;
+    position: absolute;
+    content: '';
+    width: 108%;
+    height: 108%;
+    left: -4%;
+    top: -4%;
+    border-radius: 50%;
+    z-index: 1;
+    background-image: linear-gradient(var(--rotate) , #9A3BBA , #FE4E56);
+    transition: .25s linear;
+}
+
+.dashboard .img .bg-layer::before {
+    filter: blur(10px);
+}
+
+.dashboard .img.active .bg-layer,
+.dashboard .img.active .bg-layer::before{
+    opacity: 1;
+    animation: spin 1.5s infinite;
+}
+
+
+.dashboard .img img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+}
+
+.dashboard .control {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.control .play-pause,
+.control .btn {
+    padding: 8px;
+    margin: 16px;
+    cursor: pointer;
+    transition: .3 linear;
+    color: #ffffff;
+}
+
+.control .btn.active {
+    color: var(--red)!important;
+}
+
+.control .play-pause {
+    background-color: var(--red);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+}
+
+.control .play-pause i {
+    display: none;
+    transform: translate(9px,5px);
+    font-size: 24px;
+    
+}
+
+.play-pause i.active {
+    display: block;
+}
+
+.progress {
+    width: 100%;
+    height: 6px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+/* playlist */
+
+.playlist {
+    margin-top: 388px;
+    padding: 12px;
+}
+
+.playlist .song {
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    height: 80px;
+    background-color: var(--black);
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+.song.active {
+    background-color: var(--red);
+}
+
+.song .thumb {
+    width: 50px;
+}
+
+

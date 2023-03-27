@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="./asset/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <div class="name-song">Legends Never Die</div>
+            <div class="img">
+                <div class="bg-layer"></div>
+                <img src="./asset/img/song1.png" alt="">
+            </div>
+            <div class="control">
+                <div class="btn repeat"><i class="fa-solid fa-repeat"></i></div>
+                <div class="btn prev"><i class="fa-solid fa-backward-step"></i></div>
+                <div class="play-pause">
+                    <i class="fa-solid fa-play active"></i>
+                    <i class="fa-solid fa-pause"></i>
+                </div>
+                <div class="btn netx"><i class="fa-solid fa-forward-step"></i></div>
+                <div class="btn radom"><i class="fa-solid fa-shuffle"></i></div>
+            </div>
+            <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
+            <audio id="audio" src=""></audio>
+        </div>
+
+        <div class="playlist"></div>
+
+
+
+    </div>
+    <script src="./main.js"></script>
+</body>
+</html>
