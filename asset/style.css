@@ -59,8 +59,8 @@ html {
 .dashboard {
     position: fixed;
     top: 18px;
-    right: 427px;
-    left: 427px;
+    right: 568px;
+    left: 568px;
     padding: 20px;
     border-radius: 8px 8px 0 0;
     background-color: var(--black);

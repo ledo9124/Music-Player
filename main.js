@@ -1,8 +1,14 @@
 
-
+const dashBoard = document.querySelector('.dashboard');
 const playlist = document.querySelector('.playlist');
+const nameSong = document.querySelector('.name-song');
+const cdThumb = document.querySelector('.img');
+const audio = document.querySelector('#audio');
+const cd = document.querySelector('.img');
+
 
 const app = {
+    currentIndex : 0,
     songs : [
         {
             name : 'Legends Never Die',
@@ -52,12 +58,49 @@ const app = {
         })
         playlist.innerHTML = htmls.join('');
     },
+    baseLength : function() {
+        window.addEventListener('resize', () => {
+            let withdashboard = 0;
+            withdashboard = (window.innerWidth/2) - 200;
+            dashBoard.style.left = withdashboard + 'px';
+            dashBoard.style.right = withdashboard + 'px';
+        });
+    },
+    defineProperties : function() {
+        Object.defineProperty(this , 'currentSong' , {
+            get: function () {
+                return this.songs[this.currentIndex]
+            }   
+        }) 
+    },
+    handleEvents : function(){
+        const cdWWidth = cd.offsetWidth;
 
-
+        document.querySelector('.container').onscroll = function(){
+            const scrollTop = window.scrollY || document.querySelector('.container').scrollTop;
+            const newCdWWidth = cdWWidth -scrollTop;
+            cd.style.width = newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
+            cd.style.height =  newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
+            cd.style.opacity = newCdWWidth / cdWWidth;
+        }
+    },
+    loadCurrentSong: function() {
+        nameSong.textContent = this.currentSong.name;
+        const htmls = this.songs.map(song => {
+            return `
+                <div class="bg-layer"></div>
+                <img src="${this.currentSong.image}" alt="">
+            `
+        });
+        cdThumb.innerHTML = htmls.join('');
+        audio.src = this.currentSong.path;
+    },
     strat : function() {
+        this.defineProperties();
+        this.baseLength();
+        this.handleEvents();
+        this.loadCurrentSong();
         this.render();
-
-        
     }
 
 
