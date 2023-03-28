@@ -4,13 +4,19 @@ const playlist = document.querySelector('.playlist');
 const nameSong = document.querySelector('.name-song');
 const cdThumb = document.querySelector('.img');
 const audio = document.querySelector('#audio');
-const cd = document.querySelector('.img');
 const btnPlayPause = document.querySelector('.play-pause');
 const progress = document.querySelector('#progress');
+const nextBtn = document.querySelector('.next');
+const prevBtn = document.querySelector('.prev');
+const repeatBtn = document.querySelector('.repeat');
+const radomBtn = document.querySelector('.radom');
 
 const app = {
     currentIndex : 0,
     isPlaying : false,
+    isRadom : false,
+    isRepeat : false,
+
     songs : [
         {
             name : 'Legends Never Die',
@@ -88,14 +94,24 @@ const app = {
     },
     handleEvents : function(){
         const _This = this;
+        const cdWWidth = cdThumb.offsetWidth;
+        //Xử lý cd / dừng
+        const cdThumbAnimate = cdThumb.animate([
+            {
+                transform: 'rotate(360deg)'
+            }
+        ], {
+            duration: 10000,
+            iterations: Infinity
+        })
+        cdThumbAnimate.pause();
         //Xử lý cd
-        const cdWWidth = cd.offsetWidth;
         document.querySelector('.container').onscroll = function(){
             const scrollTop = window.scrollY || document.querySelector('.container').scrollTop;
             const newCdWWidth = cdWWidth -scrollTop;
-            cd.style.width = newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
-            cd.style.height =  newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
-            cd.style.opacity = newCdWWidth / cdWWidth;
+            cdThumb.style.width = newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
+            cdThumb.style.height =  newCdWWidth > 0 ? newCdWWidth + 'px' : 0;
+            cdThumb.style.opacity = newCdWWidth / cdWWidth;
         }
         //Xử lý play-pause
         btnPlayPause.onclick = function() {
@@ -111,12 +127,16 @@ const app = {
         audio.onplay = function() {
             _This.isPlaying = true;
             btnPlayPause.classList.add('active');
+            cdThumb.classList.add('active');
+            cdThumbAnimate.play();
         }
 
         //Khi song bị pause
         audio.onpause = function() {
             _This.isPlaying = false;
             btnPlayPause.classList.remove('active');
+            cdThumb.classList.remove('active');
+            cdThumbAnimate.pause();
         }
 
         //Xử lý tiến độ song thay đổi
@@ -133,6 +153,48 @@ const app = {
             audio.currentTime = seekTime;
         }
 
+        //Khi next song
+        nextBtn.onclick = function() {
+            if (_This.isRadom) {
+                _This.radomSong();
+            }else {
+                _This.nextSong();
+            }
+            audio.play();
+        }
+        //Khi prev
+        prevBtn.onclick = function() {
+            if (_This.isRadom) {
+                _This.radomSong();
+            }else {
+                _This.prevSong();
+            }
+            audio.play();
+        }
+
+        //Bật tắt sử lý radom song
+        radomBtn.onclick = function () {
+            _This.isRadom = !_This.isRadom;
+            radomBtn.classList.toggle('active' , _This.isRadom);
+        }
+
+        //Xử lý khi repeat song
+        repeatBtn.onclick = function() {
+            _This.isRepeat = !_This.isRepeat;
+            repeatBtn.classList.toggle('active' , _This.isRepeat);
+        }
+
+        //Khi hết song
+        audio.onended = function () {
+            setTimeout(() => {
+                if (_This.isRepeat) {
+                    _This.loadCurrentSong();
+                    audio.play();
+                }else {
+                    nextBtn.click();
+                }
+            }, 1000)
+        }
 
     },
     loadCurrentSong: function() {
@@ -142,7 +204,39 @@ const app = {
         <img src="${this.currentSong.image}" alt="">`;
         cdThumb.innerHTML = htmls;
         audio.src = this.currentSong.path;
+        const song = document.querySelectorAll('.song');
+        if (document.querySelector('.song .active') !== null) {
+            document.querySelector('.song .active').classList.remove('active');
+        }
+        console.log(document.querySelector('.song .active'));
+        song[this.currentIndex].classList.add('active');
     },
+
+    nextSong : function() {
+        this.currentIndex++;
+        if (this.currentIndex >= this.songs.length) {
+            this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
+    },
+
+    prevSong: function() {
+        this.currentIndex--;
+        if (this.currentIndex < 0){
+            this.currentIndex = this.songs.length - 1;
+        }
+        this.loadCurrentSong();
+    },
+
+    radomSong : function() {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newIndex === this.currentIndex);
+        this.currentIndex = newIndex;
+        this.loadCurrentSong();
+    },
+
     strat : function() {
         this.defineProperties();
 
@@ -150,9 +244,9 @@ const app = {
 
         this.handleEvents();
 
-        this.loadCurrentSong();
-
         this.render();
+        
+        this.loadCurrentSong();
     }
 
 
