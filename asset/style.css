@@ -58,9 +58,6 @@ html {
 
 .dashboard {
     position: fixed;
-    top: 18px;
-    right: 568px;
-    left: 568px;
     padding: 20px;
     border-radius: 8px 8px 0 0;
     background-color: var(--black);
@@ -144,13 +141,20 @@ html {
 }
 
 .control .play-pause i {
-    display: none;
     transform: translate(9px,5px);
     font-size: 24px;
     
 }
 
-.play-pause i.active {
+.control .play-pause .fa-solid.fa-pause {
+    display: none;
+}
+
+.control .play-pause.active .fa-play {
+    display: none;
+}
+
+.control .play-pause.active  .fa-pause{
     display: block;
 }
 
