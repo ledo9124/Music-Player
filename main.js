@@ -19,36 +19,43 @@ const app = {
 
     songs : [
         {
+            id : 1,
             name : 'Legends Never Die',
             path : './asset/music/Legends_Never_Die.mp3',
             image : './asset/img/song1.png'
         },
         {
+            id : 2,
             name : 'Payphone',
             path : './asset/music/Payphone.mp3',
             image : './asset/img/song2.png'
         },
         {
+            id : 3,
             name : 'Attention',
             path : './asset/music/Attention.mp3',
             image : './asset/img/song3.png'
         },
         {
+            id : 4,
             name : 'Death Bed',
             path : './asset/music/Death_Bed.mp3',
             image : './asset/img/song4.png'
         },
         {
+            id : 5,
             name : 'Let Me Down Slowly',
             path : './asset/music/Let_Me_Down_Slowly.mp3',
             image : './asset/img/song5.png'
         },
         {
+            id : 6,
             name : 'We Don\'t Talk Anymore',
             path : './asset/music/We_dont_talk_anymore.mp3',
             image : './asset/img/song6.png'
         },
         {
+            id : 7,
             name : 'Rather Be',
             path : './asset/music/Rather_Be.mp3',
             image : './asset/img/song7.png'
@@ -65,6 +72,7 @@ const app = {
             `
         })
         playlist.innerHTML = htmls.join('');
+        document.querySelectorAll('.song')[0].classList.add('active');
     },
     //Xử lý kích thước dashboard
     baseLength : function() {
@@ -188,7 +196,6 @@ const app = {
         audio.onended = function () {
             setTimeout(() => {
                 if (_This.isRepeat) {
-                    _This.loadCurrentSong();
                     audio.play();
                 }else {
                     nextBtn.click();
@@ -205,10 +212,7 @@ const app = {
         cdThumb.innerHTML = htmls;
         audio.src = this.currentSong.path;
         const song = document.querySelectorAll('.song');
-        if (document.querySelector('.song .active') !== null) {
-            document.querySelector('.song .active').classList.remove('active');
-        }
-        console.log(document.querySelector('.song .active'));
+        document.querySelector('.song.active').classList.remove('active');
         song[this.currentIndex].classList.add('active');
     },
 
@@ -227,12 +231,20 @@ const app = {
         }
         this.loadCurrentSong();
     },
-
+    repeated : [],
     radomSong : function() {
         let newIndex;
+        let isIndexRepeat = false;
         do {
             newIndex = Math.floor(Math.random() * this.songs.length);
-        } while (newIndex === this.currentIndex);
+            isIndexRepeat = this.repeated.some((index) => {
+                return index == newIndex;
+            })
+            if (this.repeated.length == this.songs.length) {
+                this.repeated.splice(0 , this.songs.length -1);
+            }
+        } while (newIndex === this.currentIndex || isIndexRepeat == true);
+        this.repeated.push(newIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
     },
@@ -248,9 +260,6 @@ const app = {
         
         this.loadCurrentSong();
     }
-
-
 };
   
-
 app.strat();
