@@ -72,7 +72,8 @@ const app = {
             `
         })
         playlist.innerHTML = htmls.join('');
-        document.querySelectorAll('.song')[0].classList.add('active');
+        const listSongs = document.querySelectorAll('.song');
+        listSongs[0].classList.add('active');
     },
     //Xử lý kích thước dashboard
     baseLength : function() {
@@ -103,6 +104,7 @@ const app = {
     handleEvents : function(){
         const _This = this;
         const cdWWidth = cdThumb.offsetWidth;
+        const listSongs = document.querySelectorAll('.song');
         //Xử lý cd / dừng
         const cdThumbAnimate = cdThumb.animate([
             {
@@ -169,6 +171,7 @@ const app = {
                 _This.nextSong();
             }
             audio.play();
+            _This.scrollToActiveSong();
         }
         //Khi prev
         prevBtn.onclick = function() {
@@ -178,6 +181,7 @@ const app = {
                 _This.prevSong();
             }
             audio.play();
+            _This.scrollToActiveSong();
         }
 
         //Bật tắt sử lý radom song
@@ -202,6 +206,17 @@ const app = {
                 }
             }, 1000)
         }
+
+        //Khi chọn bài ở phần list Song
+        listSongs.forEach((song , index) => {
+            song.onclick = function() {
+                document.querySelector('.song.active').classList.remove('active');
+                listSongs[index].classList.add('active');
+                _This.currentIndex = index;
+                _This.loadCurrentSong();
+                audio.play();
+            }
+        })
 
     },
     loadCurrentSong: function() {
@@ -249,14 +264,23 @@ const app = {
         this.loadCurrentSong();
     },
 
+    scrollToActiveSong : function() {
+        setTimeout(() => {
+            document.querySelector('.song.active').scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        } ,300)
+    },
+
     strat : function() {
         this.defineProperties();
 
         this.baseLength();
 
-        this.handleEvents();
-
         this.render();
+        
+        this.handleEvents();
         
         this.loadCurrentSong();
     }

@@ -185,6 +185,7 @@ html {
     background-color: var(--black);
     border-radius: 12px;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .song.active {
